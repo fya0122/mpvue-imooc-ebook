@@ -47,13 +47,13 @@ export default {
     onLoad () {
       this.isLoading = false
       this.error = false
-      console.log('我是onLoad事件')
+      // console.log('我是onLoad事件')
     },
     // 图片加载失败
     onError () {
       this.error = true
       this.isLoading = false
-      console.log('我是onError事件')
+      // console.log('我是onError事件')
     }
   }
 }
