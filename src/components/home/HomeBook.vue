@@ -5,7 +5,7 @@
       <!-- 再次重申：实际开发，不要用index当做key -->
       <div class="home-book-row" v-for="(item, index) of bookData" :key="index">
         <div :style="{ flex: '0 0 ' + (100 / col) + '%' }" class="home-book-col" v-for="(book, bookIndex) of item" :key="bookIndex">
-          <div v-if="mode === HOME_BOOK_MODE.COL || mode === HOME_BOOK_MODE.ROW" @click="onBookClick" :style="{flexDirection: mode === HOME_BOOK_MODE.COL ? 'col' : 'row'}" class="book-wrapper">
+          <div v-if="mode === HOME_BOOK_MODE.COL || mode === HOME_BOOK_MODE.ROW" @click="onBookClick" :style="{flexDirection: mode === HOME_BOOK_MODE.COL ? 'column' : 'row'}" class="book-wrapper">
             <image-view :src="book.cover"></image-view>
             <div v-if="mode === HOME_BOOK_MODE.COL" class="book-title-wrapper book-title-col">
               <div class="book-title">{{ book.title }}</div>
@@ -196,7 +196,7 @@ export default {
           border-radius: 10px;
           height: 96px;
           box-sizing: border-box;
-          padding: 13px 14.5px 0 16px;
+          padding: 13px 0 14.5px 16px;
           .category-text {
             width: 150px;
             overflow: hidden;
