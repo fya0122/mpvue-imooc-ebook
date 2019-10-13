@@ -5,9 +5,9 @@
       <!-- 再次重申：实际开发，不要用index当做key -->
       <div class="home-book-row" v-for="(item, index) of bookData" :key="index">
         <div :style="{ flex: '0 0 ' + (100 / col) + '%' }" class="home-book-col" v-for="(book, bookIndex) of item" :key="bookIndex">
-          <div @click="onBookClick" :style="{flexDirection: mode === HOME_BOOK_MODE.col ? 'col' : 'row'}" class="book-wrapper">
+          <div v-if="mode === HOME_BOOK_MODE.COL || mode === HOME_BOOK_MODE.ROW" @click="onBookClick" :style="{flexDirection: mode === HOME_BOOK_MODE.COL ? 'col' : 'row'}" class="book-wrapper">
             <image-view :src="book.cover"></image-view>
-            <div v-if="mode === HOME_BOOK_MODE.col" class="book-title-wrapper book-title-col">
+            <div v-if="mode === HOME_BOOK_MODE.COL" class="book-title-wrapper book-title-col">
               <div class="book-title">{{ book.title }}</div>
             </div>
             <div v-else class="book-title-wrapper book-title-row">
@@ -15,6 +15,18 @@
               <div class="book-title-author-wrapper">
                 <div class="book-title book-author">{{ book.author }}</div>
                 <div class="book-title book-author">{{ book.categoryText }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="category-wrapper" v-else>
+            <div class="category-text">{{ book.text }}</div>
+            <div class="category-num">{{ book.num }}</div>
+            <div class="category-img-wrapper">
+              <div class="category-img1">
+                <image-view :src="book.cover"></image-view>
+              </div>
+              <div class="category-img2">
+                <image-view :src="book.cover2"></image-view>
               </div>
             </div>
           </div>
@@ -27,7 +39,7 @@
   </div>
 </template>
 <script>
-import { HOME_BOOK_MODE } from '../../utils/const'
+import { HOME_BOOK_MODE, CATEGORY } from '../../utils/const'
 import ImageView from '../base/ImageView'
 
 export default {
@@ -103,6 +115,10 @@ export default {
     bookData () {
       const { col, row, data } = this
       if (data && data.length > 0) {
+        // 新增，目的是把英文弄成中文的
+        data.forEach(book => {
+          book.text = CATEGORY[book.categoryText.toLowerCase()]
+        })
         const number = row * col
         const _bookData = data.slice(0, number)
         const _bookDataRow = []
@@ -168,6 +184,52 @@ export default {
                 line-height: 14px;
                 max-height: 14px;
               }
+            }
+          }
+        }
+        .category-wrapper {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          background: #f8f9f8;
+          border-radius: 10px;
+          height: 96px;
+          box-sizing: border-box;
+          padding: 13px 14.5px 0 16px;
+          .category-text {
+            width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #212832;
+            font-size: 16px;
+            line-height: 22.5px;
+          }
+          .category-num {
+            color: #868686;
+            font-size: 12px;
+            line-height: 16.5px;
+          }
+          .category-img-wrapper {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            .category-img1 {
+              position: absolute;
+              right: 0;
+              bottom: -5px;
+              z-index: 100;
+              width: 48px;
+              >>>.image {
+                border-radius: 0 0 10px 0;
+              }
+            }
+            .category-img2 {
+              position: absolute;
+              right: 30px;
+              bottom: -5px;
+              z-index: 90;
+              width: 36px;
             }
           }
         }
