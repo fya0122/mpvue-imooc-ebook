@@ -1,9 +1,9 @@
 <template>
   <div class="search-bar">
-    <div class="search-bar-wrapper">
+    <div class="search-bar-wrapper" @click="onSearchBarClick">
       <van-icon class="search" name="search" size="16px" color="#858C96"/>
-      <input placeholder-style="color: #ADB4BE;font-size: 15px;" @confirm="onConfirm" confirm-type="seach" @change="onChange" v-model="searchWord" :placeholder="hotSearch.length === 0 ? '搜索' : hotSearch" :disabled="disabled" :focus="focus" :maxlength="limit" class="search-bar-input"/>
-      <van-icon v-if="searchWord.length > 0" @click="onClearClick" class="clear" name="clear"/>
+      <input placeholder-style="color: #ADB4BE;font-size: 15px;" @confirm="onSearchBarConfirm" confirm-type="seach" @change="onSearchBarChange" v-model="searchWord" :placeholder="hotSearch.length === 0 ? '搜索' : hotSearch" :disabled="disabled" :focus="focus" :maxlength="limit" class="search-bar-input"/>
+      <van-icon v-if="searchWord.length > 0" @click="onSearchBarClearClick" class="clear" name="clear"/>
     </div>
   </div>
 </template>
@@ -35,24 +35,24 @@ export default {
   },
   methods: {
     onSearchBarClick () {
-      this.$emit('onClick')
+      this.$emit('onSearchBarClick')
     },
-    onClearClick () {
+    onSearchBarConfirm (e) {
+      const { value } = e.mp.detail
+      this.$emit('onSearchBarConfirm', value)
+    },
+    onSearchBarChange (e) {
+      const { value } = e.mp.detail
+      this.$emit('onSearchBarChange', value)
+    },
+    onSearchBarClearClick () {
       this.searchWord = ''
-      this.$emit('onClear')
+      this.$emit('onSearchBarClearClick')
     },
-    onChange (e) {
-      const { value } = e.mp.detail
-      this.$emit('onChange', value)
-    },
-    onConfirm (e) {
-      const { value } = e.mp.detail
-      this.$emit('onConfirm', value)
-    },
-    setValue (v) {
+    setSearchBarValue (v) {
       this.searchWord = v
     },
-    getValue () {
+    getSearchBarValue () {
       return this.searchWord
     }
   }

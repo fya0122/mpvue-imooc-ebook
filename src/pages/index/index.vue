@@ -1,19 +1,19 @@
 <template>
   <div class="home">
-    <search-bar :hot-search="hotSearch" @onClick="onSearchBarClick" :disabled="true"></search-bar>
+    <search-bar :hot-search="hotSearch" @onSearchBarClick="onSearchBarClick" :disabled="true"></search-bar>
     <home-card :data="homeCard"></home-card>
-    <home-banner @onClick="onBannerClick" img="http://www.youbaobao.xyz/book/res/bg.jpg" title="mpvue2.0实战多端小程序上线啦" sub-title="立即体验"></home-banner>
+    <home-banner @onHomeBannerClick="onHomeBannerClick" img="http://www.youbaobao.xyz/book/res/bg.jpg" title="mpvue2.0实战多端小程序上线啦" sub-title="立即体验"></home-banner>
     <div :style="{marginTop: '23px'}">
-      <home-book @onBookClick="onHomeBookClick" @onMoreClick="onMoreClick" :btn-text="'换一批'" mode="col" :data="recommend" :row="1" :col="3" title="为你推荐"></home-book>
+      <home-book ref="home_book_recommend" @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('recommend')" :btn-text="'换一批'" mode="col" :data="recommend" :row="1" :col="3" title="为你推荐"></home-book>
     </div>
     <div :style="{marginTop: '23px'}">
-      <home-book @onBookClick="onHomeBookClick" @onMoreClick="onMoreClick" :btn-text="'换一批'" mode="row" :data="freeRead" :row="2" :col="2" title="免费阅读"></home-book>
+      <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('freeRead')" :btn-text="'换一批'" mode="row" :data="freeRead" :row="2" :col="2" title="免费阅读"></home-book>
     </div>
     <div :style="{marginTop: '23px'}">
-      <home-book @onBookClick="onHomeBookClick" @onMoreClick="onMoreClick" :btn-text="'换一批'" mode="col" :data="hotBook" :row="1" :col="4" title="当前最热"></home-book>
+      <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('hotBook')" :btn-text="'换一批'" mode="col" :data="hotBook" :row="1" :col="4" title="当前最热"></home-book>
     </div>
     <div :style="{marginTop: '23px'}">
-      <home-book @onBookClick="onHomeBookClick" @onMoreClick="onMoreClick" :btn-text="'查看全部'" mode="category" :data="category" :row="3" :col="2" title="分类"></home-book>
+      <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="reCategoryChange" :btn-text="'查看全部'" mode="category" :data="category" :row="3" :col="2" title="分类"></home-book>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ import SearchBar from '../../components/home/SearchBar'
 import HomeCard from '../../components/home/HomeCard'
 import HomeBanner from '../../components/home/HomeBanner'
 import HomeBook from '../../components/home/HomeBook'
-import { getHomeData } from '../../api'
+import { getHomeData, recommendChangeRecommend, recommendChangeFreeRead, recommendChangeHotBook } from '../../api'
 
 export default {
   components: {
@@ -79,18 +79,36 @@ export default {
         }
       })
     },
+    // search-bar组件的点击
     onSearchBarClick () {
       // 跳转到搜索页面
     },
-    onBannerClick () {
-      console.log(123)
+    // home-banner组件的点击
+    onHomeBannerClick () {
+      console.log('onHomeBannerClick')
     },
-    onMoreClick () {
-      console.log('点击了更多')
+    // home-book组件的点击
+    onHomeBookImgClick () {
+      console.log('onHomeBookImgClick')
     },
-    onHomeBookClick () {
-      console.log('点击了图片')
-    }
+    // home-book组件的按钮点击
+    recommendChange (key) {
+      if (key === 'recommend') {
+        recommendChangeRecommend().then((res) => {
+          this.recommend = res.data.data
+        })
+      } else if (key === 'freeRead') {
+        recommendChangeFreeRead().then((res) => {
+          this.freeRead = res.data.data
+        })
+      } else if (key === 'hotBook') {
+        recommendChangeHotBook().then((res) => {
+          this.hotBook = res.data.data
+        })
+      }
+    },
+    // home-book组件的查看全部分类的跳转页面
+    reCategoryChange () {}
   }
 }
 </script>

@@ -5,7 +5,7 @@
       <!-- 再次重申：实际开发，不要用index当做key -->
       <div class="home-book-row" v-for="(item, index) of bookData" :key="index">
         <div :style="{ flex: '0 0 ' + (100 / col) + '%' }" class="home-book-col" v-for="(book, bookIndex) of item" :key="bookIndex">
-          <div v-if="mode === HOME_BOOK_MODE.COL || mode === HOME_BOOK_MODE.ROW" @click="onBookClick" :style="{flexDirection: mode === HOME_BOOK_MODE.COL ? 'column' : 'row'}" class="book-wrapper">
+          <div v-if="mode === HOME_BOOK_MODE.COL || mode === HOME_BOOK_MODE.ROW" @click="onHomeBookImgClick" :style="{flexDirection: mode === HOME_BOOK_MODE.COL ? 'column' : 'row'}" class="book-wrapper">
             <image-view :src="book.cover"></image-view>
             <div v-if="mode === HOME_BOOK_MODE.COL" class="book-title-wrapper book-title-col">
               <div class="book-title">{{ book.title }}</div>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="home-book-footer" v-if="showBtn" @click="onMoreClick">
+    <div class="home-book-footer" v-if="showBtn" @click="onHomeBookBtnClick">
       <van-button round custom-class="home-book-btn">{{ btnText }}</van-button>
     </div>
   </div>
@@ -96,16 +96,13 @@ export default {
   },
   methods: {
     // 点击更多按钮事件
-    onMoreClick () {
-      this.$emit('onMoreClick')
+    onHomeBookBtnClick () {
+      this.$emit('onHomeBookBtnClick')
     },
     // 图书点击事件
-    onBookClick () {
-      this.$emit('onBookClick')
+    onHomeBookImgClick () {
+      this.$emit('onHomeBookImgClick')
     }
-  },
-  mounted () {
-    console.log(this.bookData)
   },
   computed: {
     HOME_BOOK_MODE () {

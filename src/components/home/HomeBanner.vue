@@ -1,5 +1,5 @@
 <template>
-  <div class="home-banner" @click="onClick">
+  <div class="home-banner" @click="onHomeBannerClick">
     <div class="bg-img" :style="{backgroundImage: bgImage}">
       <div class="title">{{ title }}</div>
       <div class="subTitle">{{ subTitle }}</div>
@@ -14,8 +14,8 @@ export default {
     img: String
   },
   methods: {
-    onClick () {
-      this.$emit('onClick')
+    onHomeBannerClick () {
+      this.$emit('onHomeBannerClick')
     }
   },
   computed: {

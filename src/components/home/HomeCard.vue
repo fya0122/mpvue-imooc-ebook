@@ -12,7 +12,7 @@
       </div>
       <div class="book-info">
         <div class="book-wrap">
-          <div @click="onBookClick" v-for="item of bookList" :key="item.id" class="book-img-wrapper">
+          <div @click="onHomeCardClick" v-for="item of bookList" :key="item.id" class="book-img-wrapper">
             <image-view :src="item.cover"></image-view>
           </div>
         </div>
@@ -21,7 +21,7 @@
           <van-icon color="#828489" size="11px" class="arrow" name="arrow"></van-icon>
         </div>
       </div>
-      <div class="feedback-wrapper" @click="onFeedBackClick">反馈</div>
+      <div class="feedback-wrapper" @click="onHomeCardFeedBackClick">反馈</div>
     </div>
     <!-- 实际上我们在使用dialog这个组件的时候，一定要在dom上写入，否则是不生效的，这是一个坑，而且必须要写入id -->
     <van-dialog id="van-dialog"></van-dialog>
@@ -59,14 +59,10 @@ export default {
     }
   },
   methods: {
-    gotoShelf () { // 跳转到书架
+    onHomeCardClick () { // 点击图书的时候，触发的事件
+      this.$emit('onHomeCardClick')
     },
-    onBookClick () { // 点击图书的时候，触发的事件
-      this.$emit('onClick')
-    },
-    sign () { // 签到事件
-    },
-    onFeedBackClick () {
+    onHomeCardFeedBackClick () {
       Dialog.confirm({
         title: '反馈',
         message: '您是否确认提交反馈信息?',
