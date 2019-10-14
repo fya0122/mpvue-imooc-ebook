@@ -29,7 +29,7 @@ import HomeBanner from '../../components/home/HomeBanner'
 import HomeBook from '../../components/home/HomeBook'
 import UserAuth from '../../components/base/UserAuth'
 import { getHomeData, recommendChangeRecommend, recommendChangeFreeRead, recommendChangeHotBook } from '../../api'
-import {getUserSettings, getUserInfo, setStorageSync, getStorageSync} from '../../api/wechat'
+import { getUserSettings, getUserInfo, setStorageSync, getStorageSync, getUserOpenId } from '../../api/wechat'
 
 export default {
   components: {
@@ -74,10 +74,11 @@ export default {
         setStorageSync('userInfo', res.userInfo)
         const openId = getStorageSync('openId')
         if (!openId || openId.length === 0) {
-          console.log('请求openId')
+          getUserOpenId((myOpenId) => {
+            console.log(myOpenId)
+          })
         } else {
           console.log('已获得openId')
-          // 做后续的事情
         }
       }, (err) => {
         // 也建议在这里抛出异常
