@@ -17,7 +17,7 @@
         <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="reCategoryChange" :btn-text="'查看全部'" mode="category" :data="category" :row="3" :col="2" title="分类"></home-book>
       </div>
     </div>
-    <user-auth v-else></user-auth>
+    <user-auth @getUserInfoUserAuth="init" v-else></user-auth>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ import HomeBanner from '../../components/home/HomeBanner'
 import HomeBook from '../../components/home/HomeBook'
 import UserAuth from '../../components/base/UserAuth'
 import { getHomeData, recommendChangeRecommend, recommendChangeFreeRead, recommendChangeHotBook } from '../../api'
-import { getUserSettings } from '../../api/wechat'
+import {getUserSettings, getUserInfo, setStorageSync, getStorageSync} from '../../api/wechat'
 
 export default {
   components: {
@@ -54,15 +54,35 @@ export default {
     }
   },
   mounted () {
-    // this.getHomeData()
-    this.getUserSettings()
+    this.init()
   },
   methods: {
+    init () {
+      this.getUserSettings()
+    },
     getUserSettings () {
       getUserSettings('userInfo', () => {
         this.isAuth = true
+        this.getUserInfoUserAuth()
       }, () => {
         this.isAuth = false
+      })
+    },
+    // 授权组件的getUserInfo方法
+    getUserInfoUserAuth () {
+      getUserInfo((res) => {
+        setStorageSync('userInfo', res.userInfo)
+        const openId = getStorageSync('openId')
+        if (!openId || openId.length === 0) {
+          console.log('请求openId')
+        } else {
+          console.log('已获得openId')
+          // 做后续的事情
+        }
+      }, (err) => {
+        // 也建议在这里抛出异常
+        console.log('no~')
+        console.log(err)
       })
     },
     getHomeData () {
@@ -124,7 +144,8 @@ export default {
       }
     },
     // home-book组件的查看全部分类的跳转页面
-    reCategoryChange () {}
+    reCategoryChange () {
+    }
   }
 }
 </script>

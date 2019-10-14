@@ -1,8 +1,12 @@
+export const APP_ID = 'wx6ca257b141a31ade'
+export const APP_SECRET = 'a32f84636cfcdba9688f928da3e2cbb4'
+
 export const HOME_BOOK_MODE = {
   ROW: 'row',
   COL: 'col',
   CATEGORY: 'category'
 }
+
 export const CATEGORY = {
   computerscience: '计算机科学',
   socialsciences: '社会科学',
