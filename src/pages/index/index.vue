@@ -1,20 +1,23 @@
 <template>
-  <div class="home">
-    <search-bar :hot-search="hotSearch" @onSearchBarClick="onSearchBarClick" :disabled="true"></search-bar>
-    <home-card :data="homeCard"></home-card>
-    <home-banner @onHomeBannerClick="onHomeBannerClick" img="http://www.youbaobao.xyz/book/res/bg.jpg" title="mpvue2.0实战多端小程序上线啦" sub-title="立即体验"></home-banner>
-    <div :style="{marginTop: '23px'}">
-      <home-book ref="home_book_recommend" @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('recommend')" :btn-text="'换一批'" mode="col" :data="recommend" :row="1" :col="3" title="为你推荐"></home-book>
+  <div>
+    <div v-if="isAuth" class="home">
+      <search-bar :hot-search="hotSearch" @onSearchBarClick="onSearchBarClick" :disabled="true"></search-bar>
+      <home-card :data="homeCard"></home-card>
+      <home-banner @onHomeBannerClick="onHomeBannerClick" img="http://www.youbaobao.xyz/book/res/bg.jpg" title="mpvue2.0实战多端小程序上线啦" sub-title="立即体验"></home-banner>
+      <div :style="{marginTop: '23px'}">
+        <home-book ref="home_book_recommend" @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('recommend')" :btn-text="'换一批'" mode="col" :data="recommend" :row="1" :col="3" title="为你推荐"></home-book>
+      </div>
+      <div :style="{marginTop: '23px'}">
+        <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('freeRead')" :btn-text="'换一批'" mode="row" :data="freeRead" :row="2" :col="2" title="免费阅读"></home-book>
+      </div>
+      <div :style="{marginTop: '23px'}">
+        <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('hotBook')" :btn-text="'换一批'" mode="col" :data="hotBook" :row="1" :col="4" title="当前最热"></home-book>
+      </div>
+      <div :style="{marginTop: '23px'}">
+        <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="reCategoryChange" :btn-text="'查看全部'" mode="category" :data="category" :row="3" :col="2" title="分类"></home-book>
+      </div>
     </div>
-    <div :style="{marginTop: '23px'}">
-      <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('freeRead')" :btn-text="'换一批'" mode="row" :data="freeRead" :row="2" :col="2" title="免费阅读"></home-book>
-    </div>
-    <div :style="{marginTop: '23px'}">
-      <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="recommendChange('hotBook')" :btn-text="'换一批'" mode="col" :data="hotBook" :row="1" :col="4" title="当前最热"></home-book>
-    </div>
-    <div :style="{marginTop: '23px'}">
-      <home-book @onHomeBookImgClick="onHomeBookImgClick" @onHomeBookBtnClick="reCategoryChange" :btn-text="'查看全部'" mode="category" :data="category" :row="3" :col="2" title="分类"></home-book>
-    </div>
+    <user-auth v-else></user-auth>
   </div>
 </template>
 
@@ -24,7 +27,9 @@ import SearchBar from '../../components/home/SearchBar'
 import HomeCard from '../../components/home/HomeCard'
 import HomeBanner from '../../components/home/HomeBanner'
 import HomeBook from '../../components/home/HomeBook'
+import UserAuth from '../../components/base/UserAuth'
 import { getHomeData, recommendChangeRecommend, recommendChangeFreeRead, recommendChangeHotBook } from '../../api'
+import { getUserSettings } from '../../api/wechat'
 
 export default {
   components: {
@@ -32,7 +37,8 @@ export default {
     SearchBar,
     // ImageView,
     HomeCard,
-    HomeBanner
+    HomeBanner,
+    UserAuth
   },
   data () {
     return {
@@ -42,13 +48,23 @@ export default {
       recommend: [],
       freeRead: [],
       hotBook: [],
-      category: []
+      category: [],
+      // ture表示经过授权的
+      isAuth: true
     }
   },
   mounted () {
-    this.getHomeData()
+    // this.getHomeData()
+    this.getUserSettings()
   },
   methods: {
+    getUserSettings () {
+      getUserSettings('userInfo', () => {
+        this.isAuth = true
+      }, () => {
+        this.isAuth = false
+      })
+    },
     getHomeData () {
       getHomeData({ openId: 1234 }).then((res) => {
         const { data: {
