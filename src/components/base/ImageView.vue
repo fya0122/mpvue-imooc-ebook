@@ -1,5 +1,5 @@
 <template>
-  <div class="image-view" @click="onImageViewClick">
+  <div class="image-view" @click="onImageViewClick" :style="{ height }">
     <img v-show="!isLoading && !error" @load="onImageViewLoad" @error="onImageViewError" :class="round ? 'round image' : 'image'" :style="{ height: height }" :src="src" :mode="mode" :lazy-load="lazyLoad"/>
     <img v-show="isLoading || error" :class="round ? 'round image' : 'image'" :style="{ height: height }" src="https://www.youbaobao.xyz/book/img/loading2.ae9e5924.jpeg" :mode="mode" :lazy-load="lazyLoad"/>
   </div>

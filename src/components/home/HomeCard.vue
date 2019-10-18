@@ -3,7 +3,7 @@
     <div class="home-card-inner">
       <div class="user-info">
         <div class="avatar-wrapper">
-          <image-view :src="avatar" round></image-view>
+          <image-view height="100%" mode="scaleToFill" :src="avatar" round></image-view>
         </div>
         <div class="nickname">{{ nickname }}</div>
         <div class="shelf-text">书架共有{{ data.num }}本好书</div>
@@ -49,10 +49,10 @@ export default {
   },
   computed: {
     avatar () {
-      return (this.data && this.data.userInfo && this.data.userInfo.avatar) || ''
+      return (this.data && this.data.userInfo && this.data.userInfo.avatarUrl) || ''
     },
     nickname () {
-      return (this.data && this.data.userInfo && this.data.userInfo.nickname) || ''
+      return (this.data && this.data.userInfo && this.data.userInfo.nickName) || ''
     },
     bookList () {
       return (this.data && this.data.bookList) || []

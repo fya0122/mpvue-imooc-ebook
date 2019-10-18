@@ -28,8 +28,21 @@ import HomeCard from '../../components/home/HomeCard'
 import HomeBanner from '../../components/home/HomeBanner'
 import HomeBook from '../../components/home/HomeBook'
 import UserAuth from '../../components/base/UserAuth'
-import { getHomeData, recommendChangeRecommend, recommendChangeFreeRead, recommendChangeHotBook } from '../../api'
-import { getUserSettings, getUserInfo, setStorageSync, getStorageSync, getUserOpenId } from '../../api/wechat'
+import {
+  getHomeData,
+  recommendChangeRecommend,
+  recommendChangeFreeRead,
+  recommendChangeHotBook,
+  register
+} from '../../api'
+import {
+  getUserSettings,
+  getUserInfo,
+  setStorageSync,
+  getStorageSync,
+  getUserOpenId,
+  showLoading, hideLoading
+} from '../../api/wechat'
 
 export default {
   components: {
@@ -71,14 +84,17 @@ export default {
     // 授权组件的getUserInfo方法
     getUserInfoUserAuth () {
       getUserInfo((res) => {
+        showLoading('正在加载')
         setStorageSync('userInfo', res.userInfo)
         const openId = getStorageSync('openId')
         if (!openId || openId.length === 0) {
           getUserOpenId((myOpenId) => {
-            console.log(myOpenId)
+            this.getHomeData(myOpenId, res.userInfo)
+            register(myOpenId, res.userInfo)
           })
         } else {
-          console.log('已获得openId')
+          this.getHomeData(openId, res.userInfo)
+          register(openId, res.userInfo)
         }
       }, (err) => {
         // 也建议在这里抛出异常
@@ -86,8 +102,8 @@ export default {
         console.log(err)
       })
     },
-    getHomeData () {
-      getHomeData({ openId: 1234 }).then((res) => {
+    getHomeData (openId, userInfo) {
+      getHomeData({ openId }).then((res) => {
         const { data: {
           hotSearch: {
             keyword
@@ -109,16 +125,16 @@ export default {
         this.homeCard = {
           bookList: shelf,
           num: shelfCount,
-          userInfo: {
-            avatar: 'https://www.youbaobao.xyz/mpvue-res/logo.jpg',
-            nickname: '米老鼠'
-          }
+          userInfo: userInfo
         }
+        hideLoading()
+      }).catch(() => {
+        hideLoading()
       })
     },
     // search-bar组件的点击
     onSearchBarClick () {
-      // 跳转到搜索页面
+      this.$router.push('/pages/search/main')
     },
     // home-banner组件的点击
     onHomeBannerClick () {
