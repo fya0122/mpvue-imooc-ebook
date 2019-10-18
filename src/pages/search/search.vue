@@ -1,17 +1,26 @@
 <template>
   <div>
-    <tag text="测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本" @onTagClick="onTagClick"></tag>
+    <tag-group @onBtnClick="onBtnClick" @onTagClick="onTagClick" header-text="热门搜索" btn-text="换一批" :value="tags"></tag-group>
   </div>
 </template>
 <script>
-import Tag from './../../components/base/Tag'
+import TagGroup from '../../components/base/TagGroup'
 export default {
   components: {
-    Tag
+    TagGroup
   },
   methods: {
-    onTagClick () {
-      console.log('你好')
+    onTagClick (tag, index) {
+      console.log(tag)
+      console.log(index)
+    },
+    onBtnClick () {
+      console.log(123)
+    }
+  },
+  data () {
+    return {
+      tags: ['aaaa', 'bbbb', 'cccc', 'dddddddddddd', 'eeee']
     }
   }
 }
