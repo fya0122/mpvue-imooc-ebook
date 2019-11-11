@@ -1,13 +1,14 @@
 <template>
   <div>
-    <tag-group @onBtnClick="onBtnClick" @onTagClick="onTagClick" header-text="热门搜索" btn-text="换一批" :value="tags"></tag-group>
+    <search-list></search-list>
   </div>
 </template>
 <script>
-import TagGroup from '../../components/base/TagGroup'
+
+import SearchList from '../../components/search/SearchList'
 export default {
   components: {
-    TagGroup
+    SearchList
   },
   methods: {
     onTagClick (tag, index) {
@@ -20,7 +21,6 @@ export default {
   },
   data () {
     return {
-      tags: ['aaaa', 'bbbb', 'cccc', 'dddddddddddd', 'eeee']
     }
   }
 }
